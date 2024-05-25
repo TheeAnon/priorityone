@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "brotherhood";
+  src: url("assets/fonts/ChopinScript.ttf");
+}
+
+@layer utilities {
+  .font-expanded {
+    font-stretch: expanded;
+  }
+}

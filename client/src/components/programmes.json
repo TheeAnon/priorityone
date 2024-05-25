@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Morning priority",
+    "poster": "https://media.istockphoto.com/id/1352173615/photo/nairobi-skyline.jpg?s=612x612&w=0&k=20&c=NDcEWc2N-o54pKXICYY5f--JYZxBAXYSDghiMHoBvp8=",
+    "description": "Description",
+    "color": "#020301",
+    "text": "#E6C2BF"
+  },
+  {
+    "title": "Programme 1",
+    "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
+    "description": "Description",
+    "color": "#E6C2BF",
+    "text": "#fff"
+  },
+  {
+    "title": "Programme 2",
+    "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
+    "description": "Description",
+    "color": "#E6C2BF",
+    "text": "#020301"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Episode title",
+    "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
+    "description": "Description",
+    "duration": "21:04"
+  },
+  {
+    "id": 2,
+    "title": "Episode title",
+    "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
+    "description": "Description",
+    "duration": "21:04"
+  }
+]
