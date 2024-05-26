@@ -81,7 +81,7 @@ const AudioPlayer = ({ src, title }) => {
   };
 
   return (
-    <div className="flex mt-6 absolute bottom-4 right-4 w-full">
+    <div className="flex mt-6 absolute bottom-4 right-4 w-full z-10">
       <div className="flex ml-auto items-center gap-4 rounded bg-white p-4">
         <div className="flex flex-col gap-2">
           <div>

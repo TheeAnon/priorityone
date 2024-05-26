@@ -1,51 +1,67 @@
 [
   {
-    "title": "Morning priority",
+    "title": "Podcast Title",
     "poster": "https://media.istockphoto.com/id/1352173615/photo/nairobi-skyline.jpg?s=612x612&w=0&k=20&c=NDcEWc2N-o54pKXICYY5f--JYZxBAXYSDghiMHoBvp8=",
     "description": "Description",
     "color": "#020301",
     "text": "#E6C2BF",
-    "from": "7:00 am",
+    "day": "Monday",
+    "from": "7am",
     "to": "9:00 am",
     "host": "Holy Moh"
   },
   {
-    "title": "Best of African Hits",
+    "title": "Podcast Title",
     "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
     "description": "Description",
     "color": "#E6C2BF",
     "text": "#fff",
-    "from": "9:00 am",
+    "day": "Teusday",
+    "from": "9am",
     "to": "2:00 pm",
     "host": "Holy Moh"
   },
   {
-    "title": "Programme 2",
+    "title": "Podcast Title",
     "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
     "description": "Description",
     "color": "#E6C2BF",
     "text": "#020301",
-    "from": "8:00 pm",
+    "day": "Wednesday",
+    "from": "8pm",
     "to": "10:00 pm",
     "host": "Japheth"
   },
   {
-    "title": "Best of African Hits",
+    "title": "Podcast Title",
+    "poster": "https://media.istockphoto.com/id/1352173615/photo/nairobi-skyline.jpg?s=612x612&w=0&k=20&c=NDcEWc2N-o54pKXICYY5f--JYZxBAXYSDghiMHoBvp8=",
+    "description": "Description",
+    "color": "#020301",
+    "text": "#E6C2BF",
+    "day": "Monday",
+    "from": "7am",
+    "to": "9:00 am",
+    "host": "Holy Moh"
+  },
+  {
+    "title": "Podcast Title",
     "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
     "description": "Description",
     "color": "#E6C2BF",
     "text": "#fff",
-    "from": "9:00 am",
+    "day": "Teusday",
+    "from": "9am",
     "to": "2:00 pm",
     "host": "Holy Moh"
   },
   {
-    "title": "Programme 2",
+    "title": "Podcast Title",
     "poster": "https://unblast.com/wp-content/uploads/2019/08/Square-Poster-Mockup.jpg",
     "description": "Description",
     "color": "#E6C2BF",
     "text": "#020301",
-    "from": "8:00 pm",
+    "day": "Wednesday",
+    "from": "8pm",
     "to": "10:00 pm",
     "host": "Japheth"
   }
