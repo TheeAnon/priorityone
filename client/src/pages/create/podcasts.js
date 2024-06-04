@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "../../components/header";
 import { axiosInstance } from "../../axiosInstance";
+import { getColor } from "color-thief-react";
 
 const CreatePodcast = () => {
   const [formData, setFormData] = useState({
@@ -11,14 +12,19 @@ const CreatePodcast = () => {
     theme: "",
     topics: "",
   });
+  const [success, setSuccess] = useState("");
 
   const [errors, setErrors] = useState({
     title: "",
+    description: "",
+    poster: "",
+    host: "",
   });
 
   const onChange = (e) => {
     if (e.target.name === "poster") {
       setFormData({ ...formData, poster: e.target.files[0] }); // Handle file input
+      console.log(formData.poster + e.target.files[0]);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -43,7 +49,6 @@ const CreatePodcast = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("Podcast created successfully");
       // Clear form data after successful submission
       setFormData({
         title: "",
@@ -53,6 +58,7 @@ const CreatePodcast = () => {
         theme: "",
         topics: "",
       });
+      setSuccess("Podcast posted successfully");
     } catch (error) {
       alert("Failed to create podcast: " + error.message);
     }
@@ -67,7 +73,10 @@ const CreatePodcast = () => {
             Publish Your Podcast
           </h2>
         </div>
-        <div className="mt-4 p-5">
+        {success && (
+          <span className="text-green-400 place-self-center">{success}</span>
+        )}
+        <div className="p-5">
           <div className="grid grid-cols-2 gap-2">
             <form onSubmit={onSubmit} className="flex flex-col gap-5">
               <input
@@ -84,6 +93,7 @@ const CreatePodcast = () => {
                 placeholder="A little description about your podcast"
                 className="p-4 bg-gray-200"
                 required
+                isInvalid={errors.title}
                 value={formData.description}
                 onChange={onChange}
               ></textarea>
@@ -91,31 +101,17 @@ const CreatePodcast = () => {
                 type="file"
                 accept="image/jpeg,image/png,image/gif"
                 name="poster"
-                placeholder="Upload a high quality poster"
-                className="p-4 bg-gray-200"
                 required
+                isInvalid={errors.poster}
                 onChange={onChange}
               />
               <input
                 name="host"
                 placeholder="Host"
                 required
+                isInvalid={errors.host}
                 className="p-4 bg-gray-200"
                 value={formData.host}
-                onChange={onChange}
-              />
-              <input
-                name="theme"
-                placeholder="Color theme"
-                className="p-4 bg-gray-200"
-                value={formData.theme}
-                onChange={onChange}
-              />
-              <input
-                name="topics"
-                placeholder="Topics"
-                className="p-4 bg-gray-200"
-                value={formData.topics}
                 onChange={onChange}
               />
               <button className="p-2 rounded font-bold bg-black text-white text-lg hover:bg-gray-600">
