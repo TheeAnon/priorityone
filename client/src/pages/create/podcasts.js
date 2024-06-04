@@ -6,32 +6,55 @@ const CreatePodcast = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    poster: "",
+    poster: null, // null to handle file object
     host: "",
     theme: "",
     topics: "",
   });
 
+  const [errors, setErrors] = useState({
+    title: "",
+  });
+
   const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "poster") {
+      setFormData({ ...formData, poster: e.target.files[0] }); // Handle file input
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    if (formData.poster) {
+      data.append("poster", formData.poster); // Append file to FormData
+    }
+    data.append("host", formData.host);
+    data.append("theme", formData.theme);
+    data.append("topics", formData.topics);
+
     try {
-      await axiosInstance.post("/create/podcast/", formData);
+      await axiosInstance.post("/create/podcast/", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       alert("Podcast created successfully");
       // Clear form data after successful submission
       setFormData({
         title: "",
         description: "",
-        poster: "",
+        poster: null,
         host: "",
         theme: "",
         topics: "",
       });
     } catch (error) {
-      alert("Failed to create podcast" + error);
+      alert("Failed to create podcast: " + error.message);
     }
   };
 
@@ -52,6 +75,7 @@ const CreatePodcast = () => {
                 placeholder="Podcast title"
                 className="p-4 bg-gray-200"
                 required
+                isInvalid={errors.title}
                 value={formData.title}
                 onChange={onChange}
               />
@@ -64,11 +88,12 @@ const CreatePodcast = () => {
                 onChange={onChange}
               ></textarea>
               <input
+                type="file"
+                accept="image/jpeg,image/png,image/gif"
                 name="poster"
                 placeholder="Upload a high quality poster"
                 className="p-4 bg-gray-200"
                 required
-                value={formData.poster}
                 onChange={onChange}
               />
               <input

@@ -24,6 +24,7 @@ const Podcasts = () => {
     try {
       await axiosInstance.delete(`/delete/podcast/${podcastId}/`);
       alert("Podcast deleted: " + podcastId);
+      setPodcasts(podcasts.filter((podcast) => podcast.id !== podcastId));
     } catch (error) {
       setError("Failed to delete podcast: " + error);
     }
@@ -67,11 +68,11 @@ const Podcasts = () => {
                       key={podcast.id}
                       className="flex flex-col relative bg-cover bg-center w-full h-56"
                       style={{
-                        backgroundImage: `url('${podcast.poster}')`,
+                        backgroundImage: `url('${process.env.serverURL}${podcast.poster}')`,
                       }}
                     ></div>
                     <h3 className="font-extrabold font-sans text-xl" style={{}}>
-                      {podcast.id}
+                      {podcast.title}
                     </h3>
                     <h4
                       className="font-bold font-sans p-2 absolute top-0"
