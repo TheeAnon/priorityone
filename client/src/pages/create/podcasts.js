@@ -2,18 +2,22 @@ import { useState } from "react";
 import Header from "../../components/header";
 import { axiosInstance } from "../../axiosInstance";
 import { getColor } from "color-thief-react";
+import ImageUploader from "react-image-upload";
+import "react-image-upload/dist/index.css";
+import { Crop } from "./crop";
 
 const CreatePodcast = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    poster: null, // null to handle file object
+    poster: null,
     host: "",
     theme: "",
-    topics: "",
   });
+  const [crop, setCrop] = useState(false);
+  const [croppedImg, setCroppedImg] = useState(null);
   const [success, setSuccess] = useState("");
-
+  const [poster, setPoster] = useState(null);
   const [errors, setErrors] = useState({
     title: "",
     description: "",
@@ -21,14 +25,10 @@ const CreatePodcast = () => {
     host: "",
   });
 
-  const onChange = (e) => {
-    if (e.target.name === "poster") {
-      setFormData({ ...formData, poster: e.target.files[0] }); // Handle file input
-      console.log(formData.poster + e.target.files[0]);
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
-  };
+  const imageDelete = () => setFormData({ ...formData, poster: null });
+
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +56,6 @@ const CreatePodcast = () => {
         poster: null,
         host: "",
         theme: "",
-        topics: "",
       });
       setSuccess("Podcast posted successfully");
     } catch (error) {
@@ -99,12 +98,15 @@ const CreatePodcast = () => {
               ></textarea>
               <input
                 type="file"
-                accept="image/jpeg,image/png,image/gif"
                 name="poster"
+                placeholder="Host"
                 required
-                isInvalid={errors.poster}
-                onChange={onChange}
+                accept="image/*"
+                isInvalid={errors.host}
+                className="p-4 bg-gray-200"
+                onChange={(e) => setPoster(e.target.files[0])}
               />
+
               <input
                 name="host"
                 placeholder="Host"
@@ -118,6 +120,12 @@ const CreatePodcast = () => {
                 Publish
               </button>
             </form>
+            <div className="relative">
+              <Crop
+                img={URL.createObjectURL(poster)}
+                setCroppedImg={setCroppedImg}
+              />
+            </div>
           </div>
         </div>
       </div>
