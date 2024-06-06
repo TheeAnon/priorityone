@@ -17,31 +17,59 @@ const CreatePodcast = () => {
   const [crop, setCrop] = useState(false);
   const [croppedImg, setCroppedImg] = useState(null);
   const [success, setSuccess] = useState("");
-  const [poster, setPoster] = useState(null);
   const [errors, setErrors] = useState({
+    general: "",
     title: "",
     description: "",
     poster: "",
     host: "",
+    theme: "",
   });
+  const [loading, setLoading] = useState(false);
 
-  const imageDelete = () => setFormData({ ...formData, poster: null });
+  const onChange = (e) => {
+    setLoading(true);
+    if (e.target.name === "poster") {
+      setFormData({ ...formData, poster: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+    setLoading(false);
+  };
 
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const getTheme = (img) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      getColor(reader.result, "hex").then((result) => {
+        const contrast = require("contrast");
+        const text = contrast(result) === "light" ? "#000" : "#fff";
+        setFormData({
+          ...formData,
+          theme: JSON.stringify({ color: result, text: text }),
+        });
+      });
+    };
+    reader.readAsDataURL(img);
+  };
 
   const onSubmit = async (e) => {
+    setLoading(true);
+    setErrors({
+      general: "",
+      title: "",
+      description: "",
+      poster: "",
+      host: "",
+    });
+
     e.preventDefault();
 
     const data = new FormData();
     data.append("title", formData.title);
-    data.append("description", formData.description);
-    if (formData.poster) {
-      data.append("poster", formData.poster); // Append file to FormData
-    }
     data.append("host", formData.host);
+    data.append("description", formData.description);
+    data.append("poster", formData.poster);
     data.append("theme", formData.theme);
-    data.append("topics", formData.topics);
 
     try {
       await axiosInstance.post("/create/podcast/", data, {
@@ -49,7 +77,6 @@ const CreatePodcast = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      // Clear form data after successful submission
       setFormData({
         title: "",
         description: "",
@@ -59,8 +86,9 @@ const CreatePodcast = () => {
       });
       setSuccess("Podcast posted successfully");
     } catch (error) {
-      alert("Failed to create podcast: " + error.message);
+      setErrors({ ...errors, general: "An error occured" });
     }
+    setLoading(false);
   };
 
   return (
@@ -72,12 +100,15 @@ const CreatePodcast = () => {
             Publish Your Podcast
           </h2>
         </div>
-        {success && (
-          <span className="text-green-400 place-self-center">{success}</span>
-        )}
         <div className="p-5">
           <div className="grid grid-cols-2 gap-2">
             <form onSubmit={onSubmit} className="flex flex-col gap-5">
+              <div className="flex justify-center">
+                {errors.general && (
+                  <span className="text-red-400">{errors.general}</span>
+                )}
+                {success && <span className="text-green-400">{success}</span>}
+              </div>
               <input
                 name="title"
                 placeholder="Podcast title"
@@ -102,11 +133,12 @@ const CreatePodcast = () => {
                 placeholder="Host"
                 required
                 accept="image/*"
-                isInvalid={errors.host}
+                isInvalid={errors.poster}
                 className="p-4 bg-gray-200"
-                onChange={(e) => setPoster(e.target.files[0])}
+                onChange={(e) => {
+                  onChange(e);
+                }}
               />
-
               <input
                 name="host"
                 placeholder="Host"
@@ -116,16 +148,18 @@ const CreatePodcast = () => {
                 value={formData.host}
                 onChange={onChange}
               />
-              <button className="p-2 rounded font-bold bg-black text-white text-lg hover:bg-gray-600">
-                Publish
+              <button
+                className="p-2 rounded font-bold bg-black text-white text-lg hover:bg-gray-600 flex justify-center"
+                disabled={loading}
+              >
+                {loading ? (
+                  <div className="w-5 h-5 border rounded-full animate-spin border-t-transparent"></div>
+                ) : (
+                  "Publish"
+                )}
               </button>
             </form>
-            <div className="relative">
-              <Crop
-                img={URL.createObjectURL(poster)}
-                setCroppedImg={setCroppedImg}
-              />
-            </div>
+            <div className="relative"></div>
           </div>
         </div>
       </div>

@@ -63,16 +63,15 @@ const Podcasts = () => {
               </div>
               <div className="mt-4 grid grid-cols-4 gap-2 gap-y-4">
                 {podcasts.map((podcast) => {
-                  let theme = {};
-                  try {
-                    theme = JSON.parse(podcast.theme);
-                  } catch (e) {
-                    console.error(
-                      "Invalid JSON format for theme:",
-                      podcast.theme
-                    );
-                    theme = { color: "#FFFFFF", text: "#000000" }; // default theme
+                  let theme = { color: "#FFFFFF", text: "#000000" }; // default theme
+                  if (podcast.theme) {
+                    try {
+                      theme = JSON.parse(podcast.theme);
+                    } catch (e) {
+                      theme = { color: "#FFFFFF", text: "#000000" }; // default theme
+                    }
                   }
+
                   return (
                     <div key={podcast.id} className="relative">
                       <div
