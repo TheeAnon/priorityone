@@ -19,9 +19,7 @@ function App() {
         {["/podcast", "/podcasts"].map((path) => (
           <Route path={path} element={<Podcasts />} />
         ))}
-        {["/create/podcast", "/create/podcasts"].map((path) => (
-          <Route path={path} element={<CreatePodcast />} />
-        ))}
+        <Route path="/podcast/create" element={<CreatePodcast />} />
       </Routes>
     </Router>
   );

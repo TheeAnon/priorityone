@@ -11,7 +11,7 @@ const Podcasts = () => {
   useEffect(() => {
     const fetchPodcasts = async () => {
       try {
-        const response = await axiosInstance.get("/podcasts/");
+        const response = await axiosInstance.get("/podcast");
         setPodcasts(response.data);
       } catch (error) {
         setError("Failed to fetch podcasts: " + error.message);
@@ -22,7 +22,7 @@ const Podcasts = () => {
 
   const deletePodcast = async (podcastId) => {
     try {
-      await axiosInstance.delete(`/delete/podcast/${podcastId}/`);
+      await axiosInstance.delete(`/podcast/delete/${podcastId}/`);
       alert("Podcast deleted: " + podcastId);
       setPodcasts(podcasts.filter((podcast) => podcast.id !== podcastId));
     } catch (error) {
@@ -62,64 +62,53 @@ const Podcasts = () => {
                 </button>
               </div>
               <div className="mt-4 grid grid-cols-4 gap-2 gap-y-4">
-                {podcasts.map((podcast) => {
-                  let theme = { color: "#FFFFFF", text: "#000000" }; // default theme
-                  if (podcast.theme) {
-                    try {
-                      theme = JSON.parse(podcast.theme);
-                    } catch (e) {
-                      theme = { color: "#FFFFFF", text: "#000000" }; // default theme
-                    }
-                  }
-
-                  return (
-                    <div key={podcast.id} className="relative">
-                      <div
-                        className="flex flex-col relative bg-center bg-no-repeat w-full h-56"
+                {podcasts.map((podcast) => (
+                  <div key={podcast.id} className="relative">
+                    <div className="flex flex-col relative bg-center bg-cover bg-no-repeat w-full h-60">
+                      <img
+                        src={process.env.REACT_APP_SERVER_URL + podcast.poster}
+                        alt={podcast.title + " poster"}
+                        className="w-full h-full object-cover"
+                      />
+                      <h4
+                        className="font-bold font-sans p-2 absolute top-0"
                         style={{
-                          backgroundImage: `url('${process.env.REACT_APP_SERVER_URL}${podcast.poster}')`,
+                          backgroundColor: podcast.theme.color,
+                          color: podcast.theme.text,
                         }}
                       >
-                        <h4
-                          className="font-bold font-sans p-2 absolute top-0"
+                        {podcast.day}s {podcast.from}
+                      </h4>
+                      <button onClick={() => deletePodcast(podcast.id)}>
+                        <FaTrash
+                          size={40}
+                          className="rounded-full p-2 absolute top-2 right-2"
                           style={{
-                            backgroundColor: theme.color,
-                            color: theme.text,
+                            color: podcast.theme.color,
+                          }}
+                        />
+                      </button>
+                      <div className="flex gap-2 absolute bottom-2">
+                        <button
+                          className="p-1"
+                          style={{ backgroundColor: podcast.theme.color }}
+                        ></button>
+                        <button
+                          className="p-2"
+                          style={{
+                            backgroundColor: podcast.theme.color,
+                            color: podcast.theme.text,
                           }}
                         >
-                          {podcast.day}s {podcast.from}
-                        </h4>
-                        <button onClick={() => deletePodcast(podcast.id)}>
-                          <FaTrash
-                            size={40}
-                            className="rounded-full p-2 absolute top-2 right-2"
-                            style={{
-                              color: theme.color,
-                            }}
-                          />
+                          {podcast.host}
                         </button>
-                        <div className="flex gap-2 absolute bottom-2">
-                          <button
-                            className="p-1"
-                            style={{ backgroundColor: theme.color }}
-                          ></button>
-                          <button
-                            className="p-2"
-                            style={{
-                              backgroundColor: theme.color,
-                              color: theme.text,
-                            }}
-                          >
-                            {podcast.host}
-                          </button>
-                        </div>
                       </div>
-                      <h3 className="font-extrabold font-sans text-xl">
-                        {podcast.title}
-                      </h3>
                     </div>
-                  );
-                })}
+                    <h3 className="font-extrabold font-sans text-xl">
+                      {podcast.title}
+                    </h3>
+                  </div>
+                ))}
               </div>
             </>
           )}

@@ -1,9 +1,6 @@
 import { useState } from "react";
 import Header from "../../components/header";
 import { axiosInstance } from "../../axiosInstance";
-import { getColor } from "color-thief-react";
-import ImageUploader from "react-image-upload";
-import "react-image-upload/dist/index.css";
 import { Crop } from "./crop";
 
 const CreatePodcast = () => {
@@ -12,7 +9,6 @@ const CreatePodcast = () => {
     description: "",
     poster: null,
     host: "",
-    theme: "",
   });
   const [crop, setCrop] = useState(false);
   const [croppedImg, setCroppedImg] = useState(null);
@@ -23,36 +19,25 @@ const CreatePodcast = () => {
     description: "",
     poster: "",
     host: "",
-    theme: "",
   });
   const [loading, setLoading] = useState(false);
 
   const onChange = (e) => {
-    setLoading(true);
     if (e.target.name === "poster") {
       setFormData({ ...formData, poster: e.target.files[0] });
+      setCrop(true);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
-    setLoading(false);
   };
 
-  const getTheme = (img) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      getColor(reader.result, "hex").then((result) => {
-        const contrast = require("contrast");
-        const text = contrast(result) === "light" ? "#000" : "#fff";
-        setFormData({
-          ...formData,
-          theme: JSON.stringify({ color: result, text: text }),
-        });
-      });
-    };
-    reader.readAsDataURL(img);
+  const onCropComplete = (croppedImage) => {
+    setCroppedImg(croppedImage);
+    setCrop(false);
   };
 
   const onSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
     setErrors({
       general: "",
@@ -61,18 +46,20 @@ const CreatePodcast = () => {
       poster: "",
       host: "",
     });
-
-    e.preventDefault();
+    setSuccess("");
 
     const data = new FormData();
     data.append("title", formData.title);
     data.append("host", formData.host);
     data.append("description", formData.description);
-    data.append("poster", formData.poster);
-    data.append("theme", formData.theme);
+    if (croppedImg) {
+      data.append("poster", croppedImg, formData.poster.name); // Add cropped image to formData
+    } else {
+      data.append("poster", formData.poster);
+    }
 
     try {
-      await axiosInstance.post("/create/podcast/", data, {
+      await axiosInstance.post("/podcast/create/", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -86,7 +73,10 @@ const CreatePodcast = () => {
       });
       setSuccess("Podcast posted successfully");
     } catch (error) {
-      setErrors({ ...errors, general: "An error occured" });
+      setErrors({
+        ...errors,
+        general: `An error occurred, could not post your podcast`,
+      });
     }
     setLoading(false);
   };
@@ -112,7 +102,7 @@ const CreatePodcast = () => {
               <input
                 name="title"
                 placeholder="Podcast title"
-                className="p-4 bg-gray-200"
+                className="w-full rounded p-3 border text-lg placeholder:text-lg text-black font-bold"
                 required
                 isInvalid={errors.title}
                 value={formData.title}
@@ -121,9 +111,10 @@ const CreatePodcast = () => {
               <textarea
                 name="description"
                 placeholder="A little description about your podcast"
-                className="p-4 bg-gray-200"
+                className="w-full rounded p-3 border text-black"
+                rows={3}
                 required
-                isInvalid={errors.title}
+                isInvalid={errors.description}
                 value={formData.description}
                 onChange={onChange}
               ></textarea>
@@ -134,17 +125,15 @@ const CreatePodcast = () => {
                 required
                 accept="image/*"
                 isInvalid={errors.poster}
-                className="p-4 bg-gray-200"
-                onChange={(e) => {
-                  onChange(e);
-                }}
+                className="w-full rounded p-3 border text-black font-bold"
+                onChange={onChange}
               />
               <input
                 name="host"
                 placeholder="Host"
                 required
                 isInvalid={errors.host}
-                className="p-4 bg-gray-200"
+                className="w-full rounded p-3 border text-black font-bold"
                 value={formData.host}
                 onChange={onChange}
               />
@@ -159,7 +148,19 @@ const CreatePodcast = () => {
                 )}
               </button>
             </form>
-            <div className="relative"></div>
+            <div className="relative">
+              {crop && formData.poster ? (
+                <Crop img={formData.poster} onCropComplete={onCropComplete} />
+              ) : (
+                formData.poster && (
+                  <img
+                    src={URL.createObjectURL(formData.poster)}
+                    alt="Poster Preview"
+                    className="w-full h-auto"
+                  />
+                )
+              )}
+            </div>
           </div>
         </div>
       </div>
