@@ -1,7 +1,7 @@
 import { IoOptions } from "react-icons/io5";
-import Header from "../components/header";
+import Header from "../../components/header";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "../axiosInstance";
+import { axiosInstance } from "../../axiosInstancence";
 import { FaTrash } from "react-icons/fa";
 
 const Podcasts = () => {

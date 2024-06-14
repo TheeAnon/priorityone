@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/home";
 import Contact from "./pages/contact";
 import About from "./pages/about";
-import Podcasts from "./pages/podcasts";
-import CreatePodcast from "./pages/create/podcasts";
+import Podcasts from "./pages/podcast/index";
+import CreatePodcast from "./pages/podcast/create";
 
 function App() {
   return (

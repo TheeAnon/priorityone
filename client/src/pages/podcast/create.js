@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Header from "../../components/header";
 import { axiosInstance } from "../../axiosInstance";
-import { Crop } from "./crop";
+import Modal from "../../components/modal";
+import ImageCropModalContent from "./ImageCropModalContent";
 
 const CreatePodcast = () => {
   const [formData, setFormData] = useState({
@@ -10,8 +11,7 @@ const CreatePodcast = () => {
     poster: null,
     host: "",
   });
-  const [crop, setCrop] = useState(false);
-  const [croppedImg, setCroppedImg] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const [success, setSuccess] = useState("");
   const [errors, setErrors] = useState({
     general: "",
@@ -25,15 +25,9 @@ const CreatePodcast = () => {
   const onChange = (e) => {
     if (e.target.name === "poster") {
       setFormData({ ...formData, poster: e.target.files[0] });
-      setCrop(true);
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
-  };
-
-  const onCropComplete = (croppedImage) => {
-    setCroppedImg(croppedImage);
-    setCrop(false);
   };
 
   const onSubmit = async (e) => {
@@ -52,11 +46,7 @@ const CreatePodcast = () => {
     data.append("title", formData.title);
     data.append("host", formData.host);
     data.append("description", formData.description);
-    if (croppedImg) {
-      data.append("poster", croppedImg, formData.poster.name); // Add cropped image to formData
-    } else {
-      data.append("poster", formData.poster);
-    }
+    data.append("poster", formData.poster);
 
     try {
       await axiosInstance.post("/podcast/create/", data, {
@@ -149,17 +139,12 @@ const CreatePodcast = () => {
               </button>
             </form>
             <div className="relative">
-              {crop && formData.poster ? (
-                <Crop img={formData.poster} onCropComplete={onCropComplete} />
-              ) : (
-                formData.poster && (
-                  <img
-                    src={URL.createObjectURL(formData.poster)}
-                    alt="Poster Preview"
-                    className="w-full h-auto"
-                  />
-                )
-              )}
+              <Modal open={openModal} handleClose={() => setOpenModal(false)}>
+                <ImageCropModalContent
+                  handleDone={handleDone}
+                  handleClose={() => setOpenModal(false)}
+                />
+              </Modal>
             </div>
           </div>
         </div>
