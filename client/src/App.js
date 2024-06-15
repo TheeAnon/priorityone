@@ -4,6 +4,7 @@ import Contact from "./pages/contact";
 import About from "./pages/about";
 import Podcasts from "./pages/podcast/index";
 import CreatePodcast from "./pages/podcast/create";
+import ImageCropProvider from "./components/crop/ImageCropProvider.jsx";
 
 function App() {
   return (
@@ -19,7 +20,14 @@ function App() {
         {["/podcast", "/podcasts"].map((path) => (
           <Route path={path} element={<Podcasts />} />
         ))}
-        <Route path="/podcast/create" element={<CreatePodcast />} />
+        <Route
+          path="/podcast/create"
+          element={
+            <ImageCropProvider>
+              <CreatePodcast />
+            </ImageCropProvider>
+          }
+        />
       </Routes>
     </Router>
   );

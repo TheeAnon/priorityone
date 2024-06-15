@@ -1,13 +1,7 @@
+import { FaMinus, FaPlus, FaRotateRight, FaRotateLeft } from "react-icons/fa6";
 import { useImageCropContext } from "./ImageCropProvider";
-import {
-  ArrowUturnLeftIcon,
-  ArrowUturnRightIcon,
-  MinusIcon,
-  PlusIcon,
-} from "@heroicons/react/24/solid";
-import classNames from "classnames";
 
-export const ZoomSlider = ({ className }) => {
+export const Slider = () => {
   const {
     zoom,
     setZoom,
@@ -16,17 +10,17 @@ export const ZoomSlider = ({ className }) => {
     max_zoom,
     min_zoom,
     zoom_step,
+    handleRotateAntiCw,
+    handleRotateCw,
   } = useImageCropContext();
 
   return (
-    <div
-      className={classNames(
-        className,
-        "flex items-center justify-center gap-2"
-      )}
-    >
-      <button className="p-1" onClick={handleZoomOut}>
-        <MinusIcon className="text-gray-400 w-4" />
+    <div className="flex items-center justify-center gap-2 w-full text-xl">
+      <button className="p-2" onClick={handleRotateAntiCw}>
+        <FaRotateLeft className="text-gray-400" />
+      </button>
+      <button className="p-2" onClick={handleZoomOut}>
+        <FaMinus className="text-gray-400" />
       </button>
       <input
         type="range"
@@ -39,47 +33,11 @@ export const ZoomSlider = ({ className }) => {
           setZoom(Number(e.target.value));
         }}
       />
-      <button className="p-1" onClick={handleZoomIn}>
-        <PlusIcon className="text-gray-400 w-4" />
+      <button className="p-2" onClick={handleZoomIn}>
+        <FaPlus className="text-gray-400" />
       </button>
-    </div>
-  );
-};
-
-export const RotationSlider = ({ className }) => {
-  const {
-    rotation,
-    setRotation,
-    max_rotation,
-    min_rotation,
-    rotation_step,
-    handleRotateAntiCw,
-    handleRotateCw,
-  } = useImageCropContext();
-
-  return (
-    <div
-      className={classNames(
-        className,
-        "flex items-center justify-center gap-2"
-      )}
-    >
-      <button className="p-1" onClick={handleRotateAntiCw}>
-        <ArrowUturnLeftIcon className="text-gray-400 w-4" />
-      </button>
-      <input
-        type="range"
-        name="volju"
-        min={min_rotation}
-        max={max_rotation}
-        step={rotation_step}
-        value={rotation}
-        onChange={(e) => {
-          setRotation(Number(e.target.value));
-        }}
-      />
-      <button className="p-1" onClick={handleRotateCw}>
-        <ArrowUturnRightIcon className="text-gray-400 w-4" />
+      <button className="p-2" onClick={handleRotateCw}>
+        <FaRotateRight className="text-gray-400" />
       </button>
     </div>
   );

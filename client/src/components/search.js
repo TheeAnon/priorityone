@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -9,10 +9,10 @@ const Search = () => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search shows, podcasts and favorite hosts"
-        className="w-full rounded p-2 border text-lg font-bold placeholder:text-lg"
+        className="w-full rounded p-2 border text-lg placeholder:text-lg"
       />
       <div className="absolute right-4 bg-gray-200 p-2 rounded hover:bg-black hover:text-white cursor-pointer">
-        <FaSearch size={20} />
+        <IoSearch size={20} />
       </div>
     </div>
   );

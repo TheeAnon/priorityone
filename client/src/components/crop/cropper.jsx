@@ -19,22 +19,19 @@ const Cropper = () => {
       crop={crop}
       zoom={zoom}
       rotation={rotation}
-      cropShape="round"
       aspect={1}
       onCropChange={setCrop}
       onCropComplete={onCropComplete}
       onZoomChange={setZoom}
       setRotation={setRotation}
       showGrid={false}
+      objectFit="horizontal-cover"
       cropSize={{ width: 185, height: 185 }}
       style={{
         containerStyle: {
           height: 220,
-          width: 220,
-          top: 8,
-          bottom: 8,
-          left: 8,
-          right: 8,
+          width: "100%",
+          position: "relative",
         },
       }}
     />

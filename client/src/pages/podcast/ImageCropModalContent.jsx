@@ -1,50 +1,30 @@
-import { readFile } from "../helpers/cropImage";
-import { useImageCropContext } from "../../components/crop/ImageCropProvider";
 import Cropper from "../../components/crop/cropper";
-import {
-  RotationSlider,
-  ZoomSlider,
-} from "../../components/crop/cropper/sliders";
+import { Slider } from "../../components/crop/sliders";
 
 const ImageCropModalContent = ({ handleDone, handleClose }) => {
-  const { setImage } = useImageCropContext();
-
-  const handleFileChange = async ({ target: { files } }) => {
-    const file = files && files[0];
-    const imageDataUrl = await readFile(file);
-    setImage(imageDataUrl);
-  };
-
   return (
     <div className="text-center relative">
-      <h5 className="text-gray-800 mb-4">Edit profile picture</h5>
-      <div className="border border-dashed border-gray-200 p-6 rounded-lg">
-        <div className="flex justify-center">
-          <div className="crop-container mb-4">
-            <Cropper />
-          </div>
+      <h5 className="text-gray-800 mb-4">Crop photo</h5>
+      <div className="border border-dashed border-gray-200 p-6 rounded-lg gap-4 flex flex-col relative">
+        <div className="relative w-full">
+          <Cropper />
         </div>
-        <ZoomSlider className="mb-4" />
-        <RotationSlider className="mb-4" />
-        <input
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          className="hidden"
-          id="avatarInput"
-          accept="image/*"
-        />
-
-        <Button variant="light" className="shadow w-full mb-4 hover:shadow-lg">
-          <label htmlFor="avatarInput">Upload Another Picture</label>
-        </Button>
-        <div className="flex gap-2">
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" className="w-full" onClick={handleDone}>
-            Done & Save
-          </Button>
+        <div className="flex flex-col gap-4">
+          <Slider />
+          <div className="flex gap-2 font-bold">
+            <button
+              className="bg-gray-200 p-2 rounded hover:bg-red-100"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button
+              className="w-full bg-blue-400 rounded hover:bg-blue-100"
+              onClick={handleDone}
+            >
+              Done
+            </button>
+          </div>
         </div>
       </div>
     </div>
